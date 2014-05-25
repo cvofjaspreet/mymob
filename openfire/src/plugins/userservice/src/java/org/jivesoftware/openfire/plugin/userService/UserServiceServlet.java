@@ -43,15 +43,34 @@ import org.xmpp.packet.JID;
 
 /**
  * Servlet that addition/deletion/modification of the users info in the system.
- * Use the <b>type</b>
- * parameter to specify the type of action. Possible values are <b>add</b>,<b>delete</b> and
- * <b>update</b>. <p>
+ * Use the <b>type</b> parameter to specify the type of action. Possible values
+ * are <b>add</b>,<b>delete</b> and <b>update</b>.
+ * <p>
  * <p/>
- * The request <b>MUST</b> include the <b>secret</b> parameter. This parameter will be used
- * to authenticate the request. If this parameter is missing from the request then
- * an error will be logged and no action will occur.
- *
+ * The request <b>MUST</b> include the <b>secret</b> parameter. This parameter
+ * will be used to authenticate the request. If this parameter is missing from
+ * the request then an error will be logged and no action will occur.
+ * 
  * @author Justin Hunt
+ * 
+ * 
+ *         --------------------------------------------------------------------
+ *         ---------------------
+ * 
+ * @author jaspreet
+ * 
+ *         TODO
+ * 
+ *         1. We need to change the request to json instead of xml
+ * 
+ *         2. Request should also contain the phone number in the device. They
+ *         all are searched and the corresponding results will be created as
+ *         roaster and sent back to the user. 
+ *         
+ *         3. Request will be of type post.
+ *         
+ * 
+ * 
  */
 public class UserServiceServlet extends HttpServlet {
 
