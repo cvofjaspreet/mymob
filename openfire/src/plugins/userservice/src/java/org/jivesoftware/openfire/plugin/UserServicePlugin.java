@@ -21,10 +21,14 @@ package org.jivesoftware.openfire.plugin;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.jivesoftware.openfire.SharedGroupException;
@@ -127,7 +131,6 @@ public class UserServicePlugin implements Plugin, PropertyEventListener {
     {
         User user = getUser(username);
         userManager.deleteUser(user);
-
 		rosterManager.deleteRoster(server.createJID(username, null));
     }
 
@@ -227,7 +230,7 @@ public class UserServicePlugin implements Plugin, PropertyEventListener {
 
         try {
             r.getRosterItem(j);
-            throw new UserAlreadyExistsException(j.toBareJID());
+          //  throw new UserAlreadyExistsException(j.toBareJID());
         }
         catch (UserNotFoundException e) {
             //Roster item does not exist. Try to add it.
@@ -408,4 +411,31 @@ public class UserServicePlugin implements Plugin, PropertyEventListener {
     public void xmlPropertyDeleted(String property, Map<String, Object> params) {
         // Do nothing
     }
+    
+    
+    
+    public  Set<User> performSearch(String query) {
+		Set<User> users = new HashSet<User>();
+
+
+			String field = "Email";
+
+			Collection<User> foundUsers = new ArrayList<User>();
+
+			if (userManager != null && query.length() > 0 ) {
+				/*if (max >= 0) {
+					foundUsers.addAll(userManager.findUsers(new HashSet<String>(Arrays.asList(field)), query, startIndex, max));
+				} else {*/
+					foundUsers.addAll(userManager.findUsers(new HashSet<String>(Arrays.asList(field)), query));
+				//}
+			}
+
+			// occasionally a null User is returned so filter them out
+			for (User user : foundUsers) {
+				if (user != null) {
+					users.add(user);
+				}
+			}
+		return users;
+	}
 }

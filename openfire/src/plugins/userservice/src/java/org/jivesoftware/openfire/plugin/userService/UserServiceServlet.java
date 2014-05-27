@@ -22,8 +22,14 @@ package org.jivesoftware.openfire.plugin.userService;
 
 import gnu.inet.encoding.Stringprep;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -31,14 +37,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.jivesoftware.admin.AuthCheckFilter;
 import org.jivesoftware.openfire.SharedGroupException;
 import org.jivesoftware.openfire.XMPPServer;
+import org.jivesoftware.openfire.group.GroupAlreadyExistsException;
+import org.jivesoftware.openfire.group.GroupNotFoundException;
 import org.jivesoftware.openfire.plugin.UserServicePlugin;
+import org.jivesoftware.openfire.plugin.model.SearchResult;
+import org.jivesoftware.openfire.user.User;
 import org.jivesoftware.openfire.user.UserAlreadyExistsException;
 import org.jivesoftware.openfire.user.UserNotFoundException;
-import org.jivesoftware.util.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xmpp.packet.JID;
+
 
 
 /**
@@ -69,13 +84,16 @@ import org.xmpp.packet.JID;
  *         
  *         3. Request will be of type post.
  *         
+ *         4. User can register with no phone number.(It will be always the case of desktop app)
  * 
  * 
  */
 public class UserServiceServlet extends HttpServlet {
 
     private UserServicePlugin plugin;
-
+	private String TIME="createdTime";
+	private String USER_JID="jid";
+	private static final Logger Log = LoggerFactory.getLogger(UserServiceServlet.class);
 
     @Override
 	public void init(ServletConfig servletConfig) throws ServletException {
@@ -121,16 +139,18 @@ public class UserServiceServlet extends HttpServlet {
         String groupNames = request.getParameter("groups");
         String item_jid = request.getParameter("item_jid");
         String sub = request.getParameter("subscription");
+        String serachUser = request.getParameter("serachUser");
+        serachUser=URLDecoder.decode(serachUser,"UTF-8");
         //No defaults, add, delete, update only
         //type = type == null ? "image" : type;
        
        // Check that our plugin is enabled.
         if (!plugin.isEnabled()) {
             Log.warn("User service plugin is disabled: " + request.getQueryString());
-            replyError("UserServiceDisabled",response, out);
+           // replyError("UserServiceDisabled",rJSONObject  jsonObject=new JSONObject();esponse, out);
             return;
         }
-       
+    
         // Check this request is authorised
         if (secret == null || !secret.equals(plugin.getSecret())){
             Log.warn("An unauthorised user service request was received: " + request.getQueryString());
@@ -140,7 +160,7 @@ public class UserServiceServlet extends HttpServlet {
 
         // Some checking is required on the username
         if (username == null){
-            replyError("IllegalArgumentException",response, out);
+       replyError("IllegalArgumentException",response, out);
             return;
         }
 
@@ -158,7 +178,10 @@ public class UserServiceServlet extends HttpServlet {
             username = Stringprep.nodeprep(username);
             if ("add".equals(type)) {
                 plugin.createUser(username, password, name, email, groupNames);
-                replyMessage("ok",response, out);
+               
+				 replyMessage("ok".toString(),response, out);
+				
+          
                 //imageProvider.sendInfo(request, response, presence);
             }
             else if ("delete".equals(type)) {
@@ -215,28 +238,215 @@ public class UserServiceServlet extends HttpServlet {
         }
     }
 
-    private void replyMessage(String message,HttpServletResponse response, PrintWriter out){
-        response.setContentType("text/xml");        
-        out.println("<result>" + message + "</result>");
+	
+    /**
+     * create roaster with subscription 3 
+     * @param username 
+     * 
+     * @param result {@link SearchResult}
+     */
+    private JSONObject createRoaster(String username, SearchResult result) {
+    	JSONObject jsonObject=new JSONObject();
+    	Set<User> users =result.getUsers();
+    	Iterator<User> iterator=users.iterator();
+    	while (iterator.hasNext()) {
+			User user = (User) iterator.next();
+			try {
+				Log.info("CREATE ROASTER ="+user.getEmail());
+				Log.info("ROASTER CREATE ="+user.getUID());
+				Log.info("ROASTER CREATE ="+user.getUsername());
+				plugin.addRosterItem(username, user.getUsername(),user.getUsername() , "3", null);
+				Log.info("ROASTER CREATED ="+user.getUID());
+				String time=""+user.getCreationDate().getTime();
+				String jid=user.getEmail();
+				
+				/**
+				 * VCardManager cardManager=new VCardManager();
+				 * Element element=cardManager.getVCard(user.getUsername());
+				 * 
+				 * TODO we need to set the field for thumb and user full image
+				 * 
+				 */
+			jsonObject.put(TIME, time);
+			jsonObject.put(USER_JID, jid);	
+			return jsonObject;
+			
+			} catch (UserNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (UserAlreadyExistsException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SharedGroupException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		}
+    	
+		return jsonObject;
+	}
+
+	/**
+	 * TODO copy the method from search plug-in for searching the number in user-name 
+	 * 
+	 * @param number to be searched on server
+	 * @return {@link SearchResult}
+	 */
+	private SearchResult search(String number) {
+		Log.info("Request = "+number);
+		Set<User> users =plugin.performSearch(number);
+		Log.info("RESULT = "+users.toString());
+		SearchResult result=new SearchResult();
+		
+		if(users.size()>0){
+		result.setUsers(users);
+		result.setAvailable(true);	
+		}else{
+		result.setAvailable(false);
+		}
+		return result;
+	}
+
+	private void replyMessage(String message,HttpServletResponse response, PrintWriter out){
+        response.setContentType("text/plain");        
+        JSONObject  jsonObject=new JSONObject();
+        jsonObject.put("result", message);
+        
+        out.println(jsonObject.toString());
         out.flush();
     }
 
     private void replyError(String error,HttpServletResponse response, PrintWriter out){
-        response.setContentType("text/xml");        
-        out.println("<error>" + error + "</error>");
+    	 response.setContentType("text/plain");        
+         JSONObject  jsonObject=new JSONObject();
+         jsonObject.put("result", error);
+         
+         out.println(jsonObject.toString());
         out.flush();
     }
-    
-    @Override
+  
+    @Override 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response);
+    	
+    	   PrintWriter out = response.getWriter();
+
+    		InputStream inputStream=request.getInputStream();
+    		InputStreamReader inputStreamReader=new InputStreamReader(inputStream);
+    		BufferedReader bufferedReader=new BufferedReader(inputStreamReader);
+    		
+    		String  string="";
+    		StringBuffer buffer=new StringBuffer();
+    		while ((string=bufferedReader.readLine())!=null) {
+    			buffer.append(string);
+    		}
+    		 
+    		String jsonrequest=buffer.toString();
+    	
+    		JSONObject jsonObject=JSONObject.fromObject(jsonrequest);
+    		String type=jsonObject.getString("type");
+    		String secret=jsonObject.getString("secret");
+    		String username=jsonObject.getString("username");
+    		String password=jsonObject.getString("password");
+    		String name=jsonObject.getString("name");
+    		String email=jsonObject.getString("email");
+    		JSONArray jsonArray=jsonObject.getJSONArray("searchUser");
+    		
+    		 if (secret == null || !secret.equals(plugin.getSecret())){
+    	            Log.warn("An unauthorised user service request was received: " + request.getQueryString());
+    	            replyError("RequestNotAuthorised",response, out);
+    	            return;
+    	         }
+    		  if ("add".equals(type)) {
+                  try {
+					plugin.createUser(username, password, name, email, null);
+					
+					addRoaster(jsonArray,username,response,out);
+					
+					
+				} catch (UserAlreadyExistsException e) {
+					e.printStackTrace();
+					try {
+						/**
+						 * delete user and register user with new password
+						 */
+						plugin.deleteUser(username);
+						plugin.createUser(username, password, name, email, null);
+						addRoaster(jsonArray,username,response,out);
+					} catch (UserNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (SharedGroupException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (UserAlreadyExistsException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (GroupAlreadyExistsException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (GroupNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					addRoaster(jsonArray,username,response,out);
+				} catch (GroupAlreadyExistsException e) {
+					e.printStackTrace();
+				} catch (UserNotFoundException e) {
+					e.printStackTrace();
+				} catch (GroupNotFoundException e) {
+					e.printStackTrace();
+				}
+    		  
+    		  
+  }
+    		
+    
     }
 
-    @Override
+    private void addRoaster(JSONArray jsonArray,String username,HttpServletResponse response,PrintWriter out) {
+    	JSONArray array_result=new JSONArray();
+    	@SuppressWarnings("unchecked")
+		Iterator<String> iterator = jsonArray.iterator();
+		while (iterator.hasNext()) {
+			String number = (String) iterator.next();
+			SearchResult result=search(number);
+			if(result.isAvailable()){
+			JSONObject roaster=createRoaster(username,result);
+			/**
+			 * TODO  
+			 * 
+			 * we have to get user profile picture urls 
+			 * for both thumb-nail and big image
+			 * 
+			 * Also we need to get user last seen status and registered time
+			 */
+			array_result.add(roaster);
+			
+			//replyMessage(array_result.toString(), response, out);
+			
+			}
+			
+		}
+		JSONObject resJsonObjects=new JSONObject();
+		resJsonObjects.put("roasters",array_result.toString());
+		resJsonObjects.put("result","ok" );
+		 replyMessage(resJsonObjects.toString(),response, out);	
+	}
+
+	@Override
 	public void destroy() {
         super.destroy();
         // Release the excluded URL
         AuthCheckFilter.removeExclude("userService/userservice");
     }
+    
+    
+    @SuppressWarnings("unused")
+	private String getUserNameFromEmail(String username) {
+		// TODO Auto-generated method stub
+    	return username.substring(0, username.indexOf('@'));
+	}
+
+    
 }

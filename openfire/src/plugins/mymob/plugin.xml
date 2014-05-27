@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin>
+    <class>org.jivesoftware.openfire.plugin.MyMobPlugin</class>
+    <name>mymob</name>
+    <description>mymob.com web page</description>
+    <author>Jaspreet</author>
+    <version>1.0.0</version>
+    <date>03/19/2014</date>
+    <minServerVersion>3.9.0</minServerVersion>
+    <databaseKey>mymob</databaseKey>
+    <databaseVersion>0</databaseVersion>
+
+</plugin>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/java"/>
+	<classpathentry kind="src" path="src/plugins/mymob/src"/>
 	<classpathentry kind="src" path="src/plugins/broadcast/src/java"/>
 	<classpathentry kind="src" path="src/plugins/clientControl/src/java"/>
 	<classpathentry kind="src" path="src/plugins/clustering/src/java"/>
@@ -242,5 +243,16 @@
 	<classpathentry kind="lib" path="src/web/WEB-INF/lib/commons-io.jar"/>
 	<classpathentry kind="lib" path="src/web/WEB-INF/lib/dwr.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="src/plugins/userservice/lib/json-lib-2.4-jdk15.jar"/>
+	<classpathentry kind="lib" path="src/plugins/mymob/lib/commons-beanutils-1.8.1 (1).jar"/>
+	<classpathentry kind="lib" path="src/plugins/mymob/lib/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="src/plugins/mymob/lib/commons-lang-2.5 (1).jar"/>
+	<classpathentry kind="lib" path="src/plugins/mymob/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="src/plugins/mymob/lib/ezmorph-1.0.6.jar"/>
+	<classpathentry kind="lib" path="src/plugins/userservice/lib/commons-beanutils-1.8.1 (1).jar"/>
+	<classpathentry kind="lib" path="src/plugins/userservice/lib/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="src/plugins/userservice/lib/commons-lang-2.5 (1).jar"/>
+	<classpathentry kind="lib" path="src/plugins/userservice/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="src/plugins/userservice/lib/ezmorph-1.0.6.jar"/>
 	<classpathentry kind="output" path="work/classes"/>
 </classpath>
