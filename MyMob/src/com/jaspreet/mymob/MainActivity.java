@@ -1,17 +1,29 @@
 package com.jaspreet.mymob;
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 
 public class MainActivity extends ActionBarActivity {
+
+	private static final int VIDEO_GALLERY = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +34,7 @@ public class MainActivity extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+
 	}
 
 	@Override
@@ -59,6 +72,77 @@ public class MainActivity extends ActionBarActivity {
 					false);
 			return rootView;
 		}
+
+		public void onButtonClick(View view) {
+			Intent intent = new Intent();
+
+			intent.setType("video/*");
+
+			intent.setAction(Intent.ACTION_GET_CONTENT);
+			// intent.putExtra(android.provider.MediaStore.EXTRA_SIZE_LIMIT,
+			// 10485760L);
+			startActivityForResult(intent, VIDEO_GALLERY);
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode,
+			final Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (resultCode == RESULT_OK) {
+			try {
+				Uri mUri = data.getData();
+				String path = convertMediaUriToPath(mUri);
+				File file = new File(path);
+				long fileVideo = file.length();
+				Bitmap thumb = ThumbnailUtils.createVideoThumbnail(path,
+						MediaStore.Images.Thumbnails.MICRO_KIND);
+				String thumb_path = PhotoUtil.getThumbUri(MainActivity.this)
+						.getPath();
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+				thumb.compress(CompressFormat.PNG, 100, baos);
+
+				thumb.compress(CompressFormat.PNG, 100, new FileOutputStream(
+						thumb_path));
+
+				SendVideoFile file2 = new SendVideoFile(file);
+
+				file2.execute();
+
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
+	protected String convertMediaUriToPath(Uri uri) {
+		String[] proj = { MediaStore.Images.Media.DATA };
+		Cursor cursor = getContentResolver().query(uri, proj, null, null, null);
+		int column_index = cursor
+				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+		cursor.moveToFirst();
+		String path = cursor.getString(column_index);
+		cursor.close();
+
+		return path;
+	}
+	
+	
+	
+	public void onButtonClick(View view) {
+		Intent intent = new Intent();
+
+		intent.setType("video/*");
+
+		intent.setAction(Intent.ACTION_GET_CONTENT);
+		// intent.putExtra(android.provider.MediaStore.EXTRA_SIZE_LIMIT,
+		// 10485760L);
+		startActivityForResult(intent, VIDEO_GALLERY);
 	}
 
 }

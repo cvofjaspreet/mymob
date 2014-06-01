@@ -388,6 +388,7 @@ int style Theme_Base_AppCompat 0x7f0b007e
 int style Theme_Base_AppCompat_Light 0x7f0b007f
 int style Theme_Base_AppCompat_Light_DarkActionBar 0x7f0b0080
 int style Theme_Base_Light 0x7f0b007d
+int style Theme_Mymob 0x7f0b0085
 int style Widget_AppCompat_ActionBar 0x7f0b0000
 int style Widget_AppCompat_ActionBar_Solid 0x7f0b0002
 int style Widget_AppCompat_ActionBar_TabBar 0x7f0b0011

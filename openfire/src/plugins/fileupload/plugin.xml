@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin>
+   <class>org.jivesoftware.openfire.plugin.Fileupload</class>
+   <name>Jas File Upload</name>
+   <description>Allows users to Upload a file</description>
+   <author>Jaspreet</author>
+   <version>1.0.0</version>
+   <date>03/03/2014</date>
+   <minServerVersion>3.8.1</minServerVersion>
+</plugin>
