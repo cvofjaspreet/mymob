@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+
+
+<!--
+Automatically created by JspC.
+Place this fragment in the web.xml before all icon, display-name,
+description, distributable, and context-param elements.
+-->
+
+    <servlet>
+        <servlet-name>com.reucon.openfire.plugins.jsp.archive_002dsettings_jsp</servlet-name>
+        <servlet-class>com.reucon.openfire.plugins.jsp.archive_002dsettings_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>com.reucon.openfire.plugins.jsp.archive_002dsearch_jsp</servlet-name>
+        <servlet-class>com.reucon.openfire.plugins.jsp.archive_002dsearch_jsp</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>com.reucon.openfire.plugins.jsp.archive_002dsettings_jsp</servlet-name>
+        <url-pattern>/archive-settings.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>com.reucon.openfire.plugins.jsp.archive_002dsearch_jsp</servlet-name>
+        <url-pattern>/archive-search.jsp</url-pattern>
+    </servlet-mapping>
+
+<!--
+All session-config, mime-mapping, welcome-file-list, error-page, taglib,
+resource-ref, security-constraint, login-config, security-role,
+env-entry, and ejb-ref elements should follow this fragment.
+-->
+</web-app>

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+
+    <!-- Main plugin class -->
+    <class>com.reucon.openfire.plugin.archive.ArchivePlugin</class>
+    
+    <!-- Plugin meta-data -->
+    <name>Jas Archive Plugin</name>
+    <description>XEP-0136 compliant server side message archive for Openfire.</description>
+    <author>Jaspreet</author>
+    <version>1.0.8</version>
+    <date>01/01/2014</date>
+    <minServerVersion>3.8.1</minServerVersion>
+    <databaseKey>archive</databaseKey>
+    <databaseVersion>2</databaseVersion>
+    <licenseType>gpl</licenseType>
+    
+    <!-- Admin console meta-data -->
+    <adminconsole>              
+
+        <tab id="tab-server">
+            <sidebar id="sidebar-server-settings">
+               <item id="openarchive-settings" name="${archive.settings.title}"
+                   url="archive-settings.jsp"
+                   description="${archive.settings.description}" />
+               <item id="openarchive-search" name="${archive.search.title}"
+                   url="archive-search.jsp"
+                   description="${archive.search.description}" />
+            </sidebar>
+
+        </tab>
+
+    </adminconsole>
+</plugin>

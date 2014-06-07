@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import android.accounts.Account;
+import android.accounts.AccountAuthenticatorResponse;
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -34,7 +37,24 @@ public class MainActivity extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+		
+		
 
+Account account = new Account("dnkf", "dkf");
+AccountManager am = AccountManager.get(this);
+boolean accountCreated = am.addAccountExplicitly(account, null, null);
+ 
+Bundle extras = getIntent().getExtras();
+if (extras != null) {
+ if (accountCreated) {  //Pass the new account back to the account manager
+  AccountAuthenticatorResponse response = extras.getParcelable(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
+  Bundle result = new Bundle();
+  result.putString(AccountManager.KEY_ACCOUNT_NAME, "dnkf");
+  result.putString(AccountManager.KEY_ACCOUNT_TYPE, "dkf");
+  response.onResult(result);
+ }
+
+}
 	}
 
 	@Override
