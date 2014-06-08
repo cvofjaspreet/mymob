@@ -4,21 +4,16 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="19" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    
+    
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-
-    <uses-sdk
-        android:minSdkVersion="11"
-        android:targetSdkVersion="19" />
 
     <application
         android:name="com.jaspreet.mymob.ApplicationCalss"
@@ -38,24 +33,7 @@
         </activity>
         
         
-    <service android:name="com.jaspreet.mymob.contact.sync.ContactsSyncAdapterService"
-     android:exported="true" android:process=":contacts">
-     <intent-filter>
-      <action android:name="android.content.SyncAdapter" />
-     </intent-filter>
-     <meta-data android:name="android.content.SyncAdapter"
-      android:resource="@xml/sync_contacts" />
-    </service>
-        
-      
-    <service android:name="com.jaspreet.mymob.contact.sync.AccountAuthenticatorService"
-     android:exported="true" android:process=":auth">
-     <intent-filter>
-      <action android:name="android.accounts.AccountAuthenticator" />
-     </intent-filter>
-     <meta-data android:name="android.accounts.AccountAuthenticator"
-      android:resource="@xml/authenticator" />
-    </service>
+    
     
     </application>
 

@@ -1,4 +1,7 @@
 package com.jaspreet.mymob.contact;
+/**
+@author Jaspreet 
+*/
 
 import android.database.Cursor;
 import android.os.Bundle;

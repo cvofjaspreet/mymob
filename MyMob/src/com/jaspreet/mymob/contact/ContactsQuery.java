@@ -1,10 +1,15 @@
 package com.jaspreet.mymob.contact;
+/**
+@author Jaspreet 
+*/
 
 import com.jaspreet.mymob.util.Utils;
 
 import android.annotation.SuppressLint;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
 
 
 public interface ContactsQuery {
@@ -26,6 +31,8 @@ public interface ContactsQuery {
     final static String SELECTION =
             (Utils.hasHoneycomb() ? Contacts.DISPLAY_NAME_PRIMARY : Contacts.DISPLAY_NAME) +
             "<>''" + " AND " + Contacts.IN_VISIBLE_GROUP + "=1";
+    
+    final static String CONTACT_NAME=Utils.hasHoneycomb() ? Contacts.DISPLAY_NAME_PRIMARY : Contacts.DISPLAY_NAME;
 
     // The desired sort order for the returned Cursor. In Android 3.0 and later, the primary
     // sort key allows for localization. In earlier versions. use the display name as the sort
@@ -41,11 +48,20 @@ public interface ContactsQuery {
 
             // The contact's row id
             Contacts._ID,
+            
+            Phone.TYPE,
+            
+            //user phone number
+            ContactsContract.CommonDataKinds.Phone.NUMBER,
 
             // A pointer to the contact that is guaranteed to be more permanent than _ID. Given
             // a contact's current _ID value and LOOKUP_KEY, the Contacts Provider can generate
             // a "permanent" contact URI.
             Contacts.LOOKUP_KEY,
+            
+            
+            //if contact have phone number
+            ContactsContract.Contacts.HAS_PHONE_NUMBER,
 
             // In platform version 3.0 and later, the Contacts table contains
             // DISPLAY_NAME_PRIMARY, which either contains the contact's displayable name or
@@ -58,10 +74,10 @@ public interface ContactsQuery {
             // PHOTO_THUMBNAIL_URI. In earlier versions, there is no direct pointer; instead,
             // you generate the pointer from the contact's ID value and constants defined in
             // android.provider.ContactsContract.Contacts.
-            Utils.hasHoneycomb() ? Contacts.PHOTO_THUMBNAIL_URI : Contacts._ID,
+            Utils.hasHoneycomb() ? Contacts.PHOTO_THUMBNAIL_URI : Contacts._ID
 
             // The sort order column for the returned Cursor, used by the AlphabetIndexer
-            SORT_ORDER,
+           // SORT_ORDER,
     };
 
     // The query column numbers which map to each value in the projection

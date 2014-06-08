@@ -1,5 +1,8 @@
 package com.jaspreet.mymob;
 
+/**
+@author Jaspreet 
+*/
 
 
 import java.io.BufferedReader;
@@ -82,23 +85,7 @@ public class SendVideoFile extends AsyncTask<Void, Void, Void> {
 		
       
 		
-		
-		/*ContentValues values = new ContentValues();
-		values.put("ZMESSAGEID", message_to_be_sent.getPacketID());
-		values.put("ZTIMESTAMP", time);
-		values.put("ZBODY", "Video Sent:");
-		values.put("ZWITHJID", to);
-		values.put("ZDELIVERYSTATUS", "Sent");
-		values.put("ZJID", myjid);
-		values.put("ZMYJID", myjid);
-		values.put("ZCategory", "video");
-		values.put("ZVideoUrl", url);
-		values.put("ZVideoDownloaded", "Y");
-		values.put("ZIMAGEPATH", thumb_path);
-		values.put("ZVideopath", file.getAbsolutePath());*/
-		
-		
-		//base.Insert("MESSAGE", values);
+
 		
 		return null;
 	}

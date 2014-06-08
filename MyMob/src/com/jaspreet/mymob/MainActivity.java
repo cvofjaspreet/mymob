@@ -1,5 +1,10 @@
 package com.jaspreet.mymob;
 
+/**
+@author Jaspreet 
+*/
+
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,23 +43,6 @@ public class MainActivity extends ActionBarActivity {
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
 		
-		
-
-Account account = new Account("dnkf", "dkf");
-AccountManager am = AccountManager.get(this);
-boolean accountCreated = am.addAccountExplicitly(account, null, null);
- 
-Bundle extras = getIntent().getExtras();
-if (extras != null) {
- if (accountCreated) {  //Pass the new account back to the account manager
-  AccountAuthenticatorResponse response = extras.getParcelable(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
-  Bundle result = new Bundle();
-  result.putString(AccountManager.KEY_ACCOUNT_NAME, "dnkf");
-  result.putString(AccountManager.KEY_ACCOUNT_TYPE, "dkf");
-  response.onResult(result);
- }
-
-}
 	}
 
 	@Override

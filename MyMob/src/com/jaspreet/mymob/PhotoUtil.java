@@ -1,4 +1,7 @@
 package com.jaspreet.mymob;
+/**
+@author Jaspreet 
+*/
 
 
 import java.io.File;
@@ -144,7 +147,6 @@ public class PhotoUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		if (degrees != 0 && b != null) {
 			Matrix m = new Matrix();
 
