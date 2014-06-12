@@ -10,9 +10,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-import android.accounts.Account;
-import android.accounts.AccountAuthenticatorResponse;
-import android.accounts.AccountManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -103,7 +100,6 @@ public class MainActivity extends ActionBarActivity {
 				Uri mUri = data.getData();
 				String path = convertMediaUriToPath(mUri);
 				File file = new File(path);
-				long fileVideo = file.length();
 				Bitmap thumb = ThumbnailUtils.createVideoThumbnail(path,
 						MediaStore.Images.Thumbnails.MICRO_KIND);
 				String thumb_path = PhotoUtil.getThumbUri(MainActivity.this)

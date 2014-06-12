@@ -1,15 +1,9 @@
 package com.jaspreet.mymob;
 
 import android.app.Application;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.ContactsContract;
-import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.util.Log;
 
-import com.jaspreet.mymob.contact.ContactsQuery;
 import com.jaspreet.mymob.contact.LoadPhoneContacts;
-import com.jaspreet.mymob.util.MyMobPrefrences;
 import com.jaspreet.mymob.util.WorkQueue;
 
 public class ApplicationCalss extends Application {

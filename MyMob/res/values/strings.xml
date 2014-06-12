@@ -4,5 +4,8 @@
     <string name="app_name">My Mob</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
+    <string name="register_mymob">With My Mob</string>
+	<string name="register_facebook">With Facebook</string>
+	<string name="register_twitter">With Twitter</string>
+	<string name="register_guest">SKIP</string>
 </resources>
